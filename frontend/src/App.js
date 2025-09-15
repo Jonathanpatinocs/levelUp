@@ -14,7 +14,7 @@ function App() {
   },[])
 
   const loadUsers = async()=> {
-    const result = await axios.get("https://localhost:8000/users");
+    const result = await axios.get("http://localhost:8080/users");
     console.log(result);
   }
   return (
