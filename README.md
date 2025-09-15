@@ -10,6 +10,10 @@ Financial planner app
    - user: root
    - password: rootpassword
    - db: project_db
+4. Download MySQL Workbench
+5. Launch MySQL Workbench after installation.
+   - Click the “+” icon next to MySQL Connections to create a new connection.
+6. Connect to Dockerized MySQL.
 
 ## Quick Start: Testing API with Postman
 
