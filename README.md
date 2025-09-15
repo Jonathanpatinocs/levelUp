@@ -59,8 +59,8 @@ Run the Spring Boot Application
 Install Node.js and npm
 
 - Download and install Node.js (which include npm) from the official site: https://nodejs.org/
-- Verify the installation in your terminal: - node -v - npm -v
-  Navigate to the frontend folder
+- Verify the installation in your terminal: `- node -v` `- npm -v`
+#### Navigate to the frontend folder
 - From the project root: `cd frontend`
 - Install dependencies: `npm install`
 - Start the development server: `npm start`
