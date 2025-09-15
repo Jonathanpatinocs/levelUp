@@ -5,7 +5,7 @@ Financial planner app
 ## Run Database
 
 1. Install Docker Desktop
-2. Run `docker-compose up -d`
+2. Run `docker-compose up -d` in project root (where docker-compose.yml is)
 3. Database runs at `localhost:3306` with:
    - user: root
    - password: rootpassword
