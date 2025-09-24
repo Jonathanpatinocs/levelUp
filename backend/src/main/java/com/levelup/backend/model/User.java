@@ -13,6 +13,7 @@ public class User {
     private String username;
     private String name;
     private String email;
+    private String password;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Expense> expenses;
@@ -66,4 +67,12 @@ public class User {
     public void setBudgets(List<Budget> budgets) {
         this.budgets = budgets;
     }
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(long id) {
+        this.password = password;
+    }
+
 }
