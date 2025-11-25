@@ -1,39 +1,74 @@
-import logo from './logo.svg';
-import './App.css';
-import axios from "axios";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { AuthProvider } from "./context/AuthContext";
 
-import { useEffect, useState } from 'react';
+import Dashboard from "./pages/Dashboard";
+import Income from "./pages/Income";
+import Expenses from "./pages/Expenses";
+import ProtectedRoute from "./components/ProtectedRoute";
 
+
+function Login() {
+  return (
+    <div style={{ padding: "40px" }}>
+      <h2>Login Page </h2>
+      <p>Auth not connected yet</p>
+    </div>
+  );
+}
+
+function Register() {
+  return (
+    <div style={{ padding: "40px" }}>
+      <h2>Register Page </h2>
+      <p>Auth not connected yet</p>
+    </div>
+  );
+}
 
 function App() {
-  
-  const [users, setUsers] = useState([])
-
-  useEffect(()=> {
-    loadUsers();
-  },[])
-
-  const loadUsers = async()=> {
-    const result = await axios.get("http://localhost:8080/users");
-    console.log(result);
-  }
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <AuthProvider>
+      <Router>
+        <Routes>
+
+          {/* Public routes */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+
+          {/* Protected routes */}
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/income"
+            element={
+              <ProtectedRoute>
+                <Income />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/expenses"
+            element={
+              <ProtectedRoute>
+                <Expenses />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Default landing page */}
+          <Route path="*" element={<Login />} />
+
+        </Routes>
+      </Router>
+    </AuthProvider>
   );
 }
 
