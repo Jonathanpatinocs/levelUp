@@ -5,5 +5,6 @@ CREATE TABLE budget (
                          monthly_limit DOUBLE NOT NULL,
                          start_date DATE,
                          end_date DATE,
+                         user_id BIGINT,
                          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
