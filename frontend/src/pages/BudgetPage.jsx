@@ -1,38 +1,60 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { BudgetTable } from "../components/BudgetTable";
 import { AddBudget } from "../components/AddBudget";
-import Header from "../components/Header.jsx";
+import { AuthContext } from "../context/AuthContext";
 
 export default function BudgetPage() {
+    const { user, token } = useContext(AuthContext); // get user info and jwt
     const [budgets, setBudgets] = useState([]);
-    const userId = 1; // hardcoded for now
+    
 
-    // Fetch budgets on mount
+    // Fetch budgets
     useEffect(() => {
+    if (user && token) {
+        const fetchBudgets = async () => {
+            try {
+                const response = await fetch(`http://localhost:8080/api/budgets?userId=${user.id}`, {
+                    headers: { Authorization: `Bearer ${token}` },
+                });
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                const data = await response.json();
+                setBudgets(data);
+            } catch (err) {
+                console.error("Error fetching budgets:", err);
+            }
+        };
+
         fetchBudgets();
-    }, []);
+    }
+    }, [user, token]);
+    
 
-    const fetchBudgets = async () => {
+    const handleAddBudget = async (newBudget) => {
         try {
-            const response = await fetch(`http://localhost:8080/api/budgets?userId=${userId}`);
+            const response = await fetch(`http://localhost:8080/api/budgets`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify({ ...newBudget, userId: user.id })
+            });
             if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-            const data = await response.json();
-            setBudgets(data);
+            const savedBudget = await response.json();
+            setBudgets(prev => [...prev, savedBudget]);
         } catch (err) {
-            console.error("Error fetching budgets:", err);
+            console.error("Error adding budget:", err);
         }
-    };
-
-    const handleAddBudget = (newBudget) => {
-        // Add new budget to state
-        setBudgets((prev) => [...prev, newBudget]);
     };
 
     const handleEditBudget = async (id, updatedBudget) => {
         try {
             const response = await fetch(`http://localhost:8080/api/budgets/${id}`, {
                 method: "PUT",
-                headers: { "Content-Type": "application/json" },
+                headers: { 
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                },
                 body: JSON.stringify(updatedBudget)
             });
             if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
@@ -46,7 +68,13 @@ export default function BudgetPage() {
 
     const handleDeleteBudget = async (id) => {
         try {
-            const response = await fetch(`http://localhost:8080/api/budgets/${id}`, { method: "DELETE" });
+            const response = await fetch(`http://localhost:8080/api/budgets/${id}`,
+                 {
+                     method: "DELETE",
+                     headers: {
+                    Authorization: `Bearer ${token}`
+                    }
+                    });
             if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
             setBudgets((prev) => prev.filter(b => b.id !== id));
         } catch (err) {

@@ -1,14 +1,16 @@
-import mockExpenses from "./seedData";
+// import mockExpenses from "./seedData";
 
 export default class ExpenseClient {
   static baseUrl = 'http://localhost:8080/api';
 
 
   // Rest Endpoint - GET Expenses
-  static async getExpenses(userId) {
+  static async getExpenses(userId, token) {
     const url = `${ExpenseClient.baseUrl}/expenses${userId ? `?userId=${encodeURIComponent(userId)}` : ''}`;
     try {
-      const response = await fetch(url);
+      const response = await fetch(url, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
       // If status error, throw exception
       if (!response.ok) {
         throw new Error(`Failed to fetch expenses from ${url}`);
@@ -22,15 +24,15 @@ export default class ExpenseClient {
   }
 
   // Rest Endpoint - POST Expense
-  static async addExpense(expense) {
+  static async addExpense(expense, user, token) {
     const url = `${ExpenseClient.baseUrl}/expenses`;
-    try {
-      expense.userId = 1
+    expense.userId = user.id;
+    try { 
       // Save HTTP Fetched Data
       const response = await fetch(url, {
         // Post Requirements
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify(expense),
       });
       // If Status Error, Throw Exception
@@ -48,14 +50,14 @@ export default class ExpenseClient {
 
 
   // Rest Endpoint - PUT Expense
-  static async updateExpense(id, expense) {
+  static async updateExpense(id, expense, token) {
     const url = `${ExpenseClient.baseUrl}/expenses/${encodeURIComponent(id)}`;
     try {
       // Save HTTP Fetched Data
       const response = await fetch(url, {
         // Put Requirements
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify(expense),
       });
       // If Status Error, Throw Exception
@@ -73,13 +75,14 @@ export default class ExpenseClient {
 
 
   // Rest Endpoint - DELETE Expense
-  static async deleteExpense(id) {
+  static async deleteExpense(id, token) {
     const url = `${ExpenseClient.baseUrl}/expenses/${encodeURIComponent(id)}`;
     try {
       // Save HTTP Fetched Data
       const response = await fetch(url, {
         // Delete Requirements
-        method: 'DELETE'
+        method: 'DELETE',
+         headers: { Authorization: `Bearer ${token}` }
       });
       // If Status Error, Throw Exception
       if (!response.ok) {

@@ -1,46 +1,30 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import levelUp from '../assets/levelUp-logo.png';
 import PageWrapper from './PageWrapper';
+import { AuthContext } from "../context/AuthContext";
 
 const Login = ({ onForgotPasswordClick, onSignUpClick, onLoginSuccess }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const { login } = useContext(AuthContext);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
         setIsLoading(true);
 
+
+
+        
         try {
-            // FOR TESTING: Skip API call and immediately login
-            console.log("TEST MODE: Bypassing authentication");
-
-            // Simulate API delay
-            await new Promise(resolve => setTimeout(resolve, 500));
-
-            // Create a mock token for testing
-            const mockToken = 'mock_jwt_token_for_testing_' + Date.now();
-            localStorage.setItem('auth_token', mockToken);
-
-            // Success - go to main app
-            onLoginSuccess();
-
-        } catch (err) {
-            setError(err.message || 'Invalid email or password.');
-        } finally {
-            setIsLoading(false);
-        }
-
-        // OLD CODE (commented out for testing):
-        /*
-        try {
-            // Replace with your actual backend URL
-            const response = await fetch('http://localhost:5000/api/login', {
+            
+            const response = await fetch('http://localhost:8080/api/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+
                 },
                 body: JSON.stringify({ email, password }),
             });
@@ -48,17 +32,18 @@ const Login = ({ onForgotPasswordClick, onSignUpClick, onLoginSuccess }) => {
             const data = await response.json();
 
             if (!response.ok) {
-                throw new Error(data.message || 'Login failed');
+                throw new Error(data.message || 'Invalid email or password.');
             }
+             login(data.token);
 
-            localStorage.setItem('auth_token', data.token);
+            
             onLoginSuccess();
         } catch (err) {
             setError(err.message || 'Invalid email or password.');
         } finally {
             setIsLoading(false);
         }
-        */
+        
     };
 
     return (
@@ -75,6 +60,7 @@ const Login = ({ onForgotPasswordClick, onSignUpClick, onLoginSuccess }) => {
                         Sign in to continue to your dashboard
                     </p>
                     {/* TEST MODE NOTICE */}
+                    {/*
                     <p style={{
                         textAlign: 'center',
                         color: '#ff747b',
@@ -84,6 +70,7 @@ const Login = ({ onForgotPasswordClick, onSignUpClick, onLoginSuccess }) => {
                     }}>
                         TEST MODE: Click "Sign in" to enter app
                     </p>
+                    */}
                 </div>
 
                 <form className="form-stack" onSubmit={handleSubmit}>
@@ -152,7 +139,7 @@ const Login = ({ onForgotPasswordClick, onSignUpClick, onLoginSuccess }) => {
                             disabled={isLoading}
                             className="btn-primary"
                         >
-                            {isLoading ? 'Signing in...' : 'Sign in (TEST MODE)'}
+                            {isLoading ? 'Signing in...' : 'Sign in'}
                         </button>
                     </div>
                 </form>

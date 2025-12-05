@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import './AddBudget.css';
+import { AuthContext } from '../context/AuthContext';
 
 export function AddBudget({ onAdd }) {
+    const { user, token } = useContext(AuthContext); // get user and jwt
     const [form, setForm] = useState({ amount: "", category: "", description: "" });
     const [error, setError] = useState("");
 
@@ -38,18 +40,21 @@ export function AddBudget({ onAdd }) {
     };
 
     try {
-        await fetch(`http://localhost:8080/api/budgets`, {
+        const response = await fetch(`http://localhost:8080/api/budgets`, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: 
+            { 
+                "Content-Type": "application/json" ,
+                Authorization: `Bearer ${token}`
+            },
             body: JSON.stringify(body)
         });
+        if (!response.ok) throw new Error("Failed to add budget");
+
+            const savedBudget = await response.json();
 
         // Update local UI
-        onAdd({
-            amount,
-            category: trimmedCategory,
-            description: trimmedDescription
-        });
+        onAdd(savedBudget);
 
         setForm({ amount: "", category: "", description: "" });
 

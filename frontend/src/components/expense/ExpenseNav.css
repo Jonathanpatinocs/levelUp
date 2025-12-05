@@ -6,6 +6,7 @@
 .expenses-display {
   min-height: 400px;
 }
+
 /*Outer Container*/
 .expense-nav {
   position: sticky;
@@ -71,6 +72,7 @@
 /* ---------- Right: Log-out ---------- */
 .expense-logout {
   justify-self: end;
+  color: white;
 }
 
 .btn {

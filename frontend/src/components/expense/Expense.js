@@ -1,8 +1,8 @@
 // React Imports 
 // useState returns an array with TWO things: variable and setter w/ initial state.
 // useEffect used for occasional clean-up / changes when requeted.
-import { useState, useEffect } from 'react';
-
+import { useState, useEffect, useContext } from 'react';
+import { AuthContext } from '/Users/johnypatino/levelUp/frontend/src/context/AuthContext.js'
 // Imported Components
 import ExpenseClient from './ExpenseClient';
 import ExpenseForm from './ExpenseForm';
@@ -18,6 +18,7 @@ import './Expense.css';
 // - Owns which expense is currently selected for editing
 // - Passes data + callbacks to children
 export default function Expense() {
+  const { user, token } = useContext(AuthContext); // get user and jwt
 
   // State for List Display
   const [expenses, setExpenses] = useState([]);
@@ -27,18 +28,20 @@ export default function Expense() {
 
   // Auto-Load Expenses on Mount
   useEffect(() => {
-    (async () => {
+    if (!user || !token) return;
+
+    const fetchExpenses = async () => {
       try {
-        const data = await ExpenseClient.getExpenses();
-        // Store in Array
+        const data = await ExpenseClient.getExpenses(user.id, token);
         setExpenses(Array.isArray(data) ? data : []);
       } catch (err) {
         console.error("Failed to load expenses:", err);
-        setExpenses([]); // fail-safe
+        setExpenses([]);
       }
-    }
-    )();
-  }, []);
+    };
+
+    fetchExpenses();
+  }, [user, token]);
 
   // Refresh Handler After Successful ADD or UPDATE 
   // The form will call this with a `expenseData` object that may or may not have an `id`.
@@ -65,7 +68,7 @@ export default function Expense() {
         // If ID NOT Provided, Add Expense
       } else {
 
-        const created = await ExpenseClient.addExpense(expenseData);
+        const created = await ExpenseClient.addExpense(expenseData, user, token);
 
         // Refresh List to Display Added Expense
         setExpenses((prev) => [created, ...prev]);
@@ -85,8 +88,9 @@ export default function Expense() {
 
   // Function - Delete Expense
   const handleDeleteExpense = async (id) => {
+    if (!token) return;
     try {
-      await ExpenseClient.deleteExpense(id);
+      await ExpenseClient.deleteExpense(id, token);
 
       // Refresh List w/out Expense
       setExpenses((prev) => prev.filter((e) => e.id !== id));

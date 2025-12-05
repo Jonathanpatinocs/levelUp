@@ -3,19 +3,19 @@ import logo from '../../assets/levelUp-logo.png';
 import { Link } from "react-router-dom";
 // Import css File
 import './ExpenseNav.css';
+import { useContext } from 'react';
+import { AuthContext } from '../../context/AuthContext';
 
 // Expense NavBar Component Function
 export default function ExpenseNav() {
  
   // Function - Logout
-  async function handleLogout() {
-    try {
-      await fetch('/logout', { method: 'POST', credentials: 'include' });
-    } catch (_) {
-    } finally {
-      window.location.replace('/login');
-    }
-  }
+function LogoutButton() {
+  const { logout } = useContext(AuthContext);
+
+  return <button onClick={logout}>Logout</button>;
+}
+  
 
   // Top Navigation Display
   return (
@@ -49,9 +49,9 @@ export default function ExpenseNav() {
 
         {/*===================Right Navigation===========*/}
         <div className="expense-logout">
-          <button className="btn btn--outline" href="#!" onClick={handleLogout}>
+          <LogoutButton className="btn btn--outline" href="#!" >
             Log Out
-          </button>
+          </LogoutButton>
         </div>
       </div>
     </header>

@@ -15,9 +15,20 @@ const ForgotPassword = ({ onBackToLogin }) => {
     const formData = new FormData(e.target);
     const email = formData.get('email');
 
-    // will need to replace with actual backend URL if it is different
     try {
-      const response = await fetch('http://localhost:5000/api/forgot-password', {
+    // Instead of calling a backend, just show a "Contact support" message
+    await new Promise((resolve) => setTimeout(resolve, 500)); // optional: fake loading delay
+    setSubmitted(true);
+  } catch (err) {
+    setError('Please contact support.');
+  } finally {
+    setIsLoading(false);
+  }
+};
+// forgot password missing backend currently
+/* 
+    try {
+      const response = await fetch('http://localhost:3000/api/forgot-password', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -36,8 +47,8 @@ const ForgotPassword = ({ onBackToLogin }) => {
       setError(err.message || 'An error occurred. Please try again.');
     } finally {
       setIsLoading(false);
-    }
-  };
+    } 
+  }; */
 
   return (
     <PageWrapper>

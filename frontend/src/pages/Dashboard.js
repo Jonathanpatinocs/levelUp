@@ -1,20 +1,37 @@
 import Navbar from "../components/Navbar";
 import { Link } from "react-router-dom";
 import { PieChart, Pie, Tooltip, Legend, Cell } from "recharts";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext, useCallback } from "react";
+import { AuthContext } from "../context/AuthContext";
 
 const COLORS = ["#511D43", "#901E3E", "#DC2525", "#EAEBD0", "#075B5E"];
 
 function BudgetPieChart() {
+  const { user, token } = useContext(AuthContext);
   const [budgets, setBudgets] = useState([]);
 
-  const userId = 1; // hardcoded for now
+  const fetchBudgets = useCallback(async () => {
+    if (!user || !token) return;
+
+    try {
+      const response = await fetch(`http://localhost:8080/api/budgets?userId=${user.id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      const data = await response.json();
+      setBudgets(data);
+    } catch (err) {
+      console.error("Error fetching budgets:", err);
+    }
+  }, [user, token]);
+
   useEffect(() => {
-    fetch(`http://localhost:8080/api/budgets?userId=${userId}`)  // backend route
-      .then(res => res.json())
-      .then(data => setBudgets(data))
-      .catch(err => console.error("Error fetching budgets:", err));
-  }, []);
+    fetchBudgets();
+  }, [fetchBudgets]);
+
+  if (!user) return <p>Loading user info...</p>;
   if (budgets.length === 0) {
     return (
       <div style={{ textAlign: "center", padding: "40px" }}>
