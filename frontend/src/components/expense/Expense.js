@@ -2,7 +2,7 @@
 // useState returns an array with TWO things: variable and setter w/ initial state.
 // useEffect used for occasional clean-up / changes when requeted.
 import { useState, useEffect, useContext } from 'react';
-import { AuthContext } from '/Users/johnypatino/levelUp/frontend/src/context/AuthContext.js'
+import { AuthContext } from '../../context/AuthContext';
 // Imported Components
 import ExpenseClient from './ExpenseClient';
 import ExpenseForm from './ExpenseForm';
