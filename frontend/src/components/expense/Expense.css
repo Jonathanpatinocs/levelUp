@@ -20,6 +20,7 @@
   margin-top: 20px;
   padding: 0 1.5rem;
   z-index: 10; /* Ensure header stays on top */
+  font-weight: bold;
 }
 
 /* Expense Split View - Holds panes */

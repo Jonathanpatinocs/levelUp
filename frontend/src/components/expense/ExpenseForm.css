@@ -14,12 +14,22 @@
   font-size: 1.5rem;
   color: var(--brand-red-dark);
   font-family: var(--font-base);
+  font-weight: bold;
 }
 
-/* Expense Form Button */
-.expense-form button {
-  flex: 1;
+/* Save / Update Buttons Container*/
+.form-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* Save / Update Buttons*/
+.form-actions button {
+  display: flex;
+  flex-direction: column;
   margin-top: 1rem;
+  width: 100%;
   /* Adds vertical space before the button */
   padding: 0.6rem 1.2rem;
   border: none;
@@ -35,16 +45,6 @@
     transform 0.1s ease;
 }
 
-/* Save / Cancel Buttons */
-.form-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-
-.form-actions .secondary-btn {
-  width: 100%;
-}
 
 /* Expense Form */
 .expense-form .form-group {
@@ -80,5 +80,10 @@
   /* subtle shadow for depth */
 
 }
+
 /* Expense Form Errors*/
-.error { color: #b00020; font-size: 0.95rem; margin: -0.5rem 0 0.75rem 0; }
+.error {
+  color: #b00020;
+  font-size: 0.95rem;
+  margin: -0.5rem 0 0.75rem 0;
+}

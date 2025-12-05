@@ -6,17 +6,18 @@
   max-height: calc(100% - 125px); /* Ensure it fills the height of its parent */
 }
 
-/* Add Expense header */
+/* Current Expenses Header */
 .expenses-display h2 {
   margin-bottom: 1rem;
   font-size: 1.5rem;
   color: var(--brand-red-dark);
   font-family: var(--font-base);
+  font-weight: bold;
 }
 
 /* Expense Edit Button */
 .update-expense-btn {
-  width: 115px;
+  width: 120px;
   margin-top: 1rem;
   padding: 0.15rem 1rem;
   margin-right: 1rem;
@@ -36,7 +37,7 @@
 
 /* Expense Delete Button */
 .delete-expense-btn {
-  width: 115px;
+  width: 120px;
   margin-top: 1rem;
   padding: 0.15rem 1rem;
   margin-right: 1rem;
@@ -78,6 +79,7 @@ h3.expense-category {
   color: #000000;
   font-family: var(--font-base);
   text-decoration: underline;
+  font-weight: bold;
 }
 
 

@@ -198,15 +198,16 @@ export default function ExpenseForm({ initialData, onSubmit, onCancelEdit }) {
         {errors.expenseDate && <p className="error">{errors.expenseDate}</p>}
 
         <div className="form-actions">
-          <button type="submit" >
-            {isEditMode ? 'Update Expense' : 'Save Expense'}
+          <button 
+          type="submit"
+          >
+            {isEditMode ? 'Update Expense' : 'Add Expense'}
           </button>
 
           {/* Show Cancel Only When Edit Mode*/}
           {isEditMode && onCancelEdit && (
             <button
               type="button"
-              className="secondary-btn"
               onClick={onCancelEdit}
             >
               Cancel
